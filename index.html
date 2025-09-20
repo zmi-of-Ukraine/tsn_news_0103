@@ -1,0 +1,2379 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ТСН Новини</title>
+  <style>
+      :root {
+    --bg-color: #ffffff;
+    --text-color: #333333;
+    --accent-color: #c62828;
+    --accent-color-hover: #8e0000;
+    --success-color: #4caf50;
+    --info-color: #2196f3;
+    --card-bg: #f9f9f9;
+    --card-bg-blur: rgba(255, 255, 255, 0.9);
+    --border-color: #e0e0e0;
+    --header-height: 70px;
+    --sidebar-width: 240px;
+    --font-primary: 'Segoe UI', 'Nunito', Tahoma, Geneva, Verdana, sans-serif;
+    --shadow-light: 0 4px 12px rgba(198, 40, 40, 0.1);
+    --shadow-hover: 0 8px 24px rgba(198, 40, 40, 0.15);
+    --glass-blur: blur(16px);
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --gradient: linear-gradient(135deg, #ffffff 0%, #ffecec 100%);
+    --sidebar-shadow: 0 8px 32px rgba(150, 10, 10, 0.08);
+    --modal-bg: rgba(0, 0, 0, 0.5);
+    --blur: blur(12px);
+  }
+
+  [data-theme="dark"] {
+    --bg-color: #1a1a1a;
+    --text-color: #f0f0f0;
+    --accent-color: #ff5252;
+    --accent-color-hover: #ff1a1a;
+    --success-color: #66bb6a;
+    --info-color: #42a5f5;
+    --card-bg: #2a2a2a;
+    --card-bg-blur: rgba(40, 40, 40, 0.8);
+    --border-color: #444444;
+    --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.25);
+    --shadow-hover: 0 8px 24px rgba(255, 82, 82, 0.25);
+    --gradient: linear-gradient(135deg, #1a1a1a 0%, #2a0a0a 100%);
+    --sidebar-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    --modal-bg: rgba(0, 0, 0, 0.7);
+  }
+
+  * {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: var(--font-primary);
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    min-height: 100vh;
+    transition: background 0.5s, color 0.3s;
+    background: var(--gradient);
+    background-attachment: fixed;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.6;
+  }
+
+  /* HEADER STYLES */
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    background: white;
+    color: #c62828;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    font-weight: 800;
+    font-size: 1.8rem;
+    letter-spacing: 0.01em;
+    user-select: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 2000;
+    border-bottom: 3px solid #c62828;
+  }
+
+  [data-theme="dark"] header {
+    background: #222;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    border-bottom: 3px solid #ff5252;
+  }
+
+  .header-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  #menu-toggle {
+    cursor: pointer;
+    font-size: 1.8rem;
+    background: transparent;
+    color: var(--accent-color);
+    padding: 0.5rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    transition: all var(--transition);
+  }
+
+  #menu-toggle:hover {
+    background: rgba(198, 40, 40, 0.1);
+  }
+
+  .header-btn {
+    background: white;
+    color: #c62828;
+    border: 2px solid #c62828;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 10px;
+    padding: 0.5rem 1.2rem;
+    cursor: pointer;
+    transition: all var(--transition);
+    box-shadow: 0 2px 6px rgba(198, 40, 40, 0.1);
+    line-height: 1.35;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  [data-theme="dark"] .header-btn {
+    background: #333;
+    color: #ff5252;
+    border: 2px solid #ff5252;
+  }
+
+  .header-btn:hover,
+  .header-btn.active {
+    background: #c62828;
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  [data-theme="dark"] .header-btn:hover {
+    background: #ff5252;
+  }
+
+  /* SIDEBAR STYLES */
+  #sidebar {
+    width: var(--sidebar-width);
+    min-width: 200px;
+    background: white;
+    border-left: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.5rem 1rem;
+    position: fixed;
+    top: var(--header-height);
+    right: -250px;
+    bottom: 0;
+    box-shadow: var(--sidebar-shadow);
+    z-index: 1000;
+    transition: right 0.4s;
+    overflow-y: auto;
+  }
+
+  [data-theme="dark"] #sidebar {
+    background: #2a2a2a;
+    border-left: 1px solid #444;
+  }
+
+  #sidebar.open {
+    right: 0;
+  }
+
+  .sidebar-btn {
+    background: white;
+    color: #333;
+    text-align: left;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all var(--transition);
+    border: 1px solid #e0e0e0;
+    box-shadow: var(--shadow-light);
+  }
+
+  [data-theme="dark"] .sidebar-btn {
+    background: #333;
+    color: #f0f0f0;
+    border: 1px solid #444;
+  }
+
+  .sidebar-btn.active,
+  .sidebar-btn:hover {
+    background: #c62828;
+    color: white;
+    transform: translateX(-5px);
+    border-color: #c62828;
+  }
+
+  [data-theme="dark"] .sidebar-btn.active,
+  [data-theme="dark"] .sidebar-btn:hover {
+    background: #ff5252;
+  }
+
+  /* MAIN CONTENT */
+  main {
+    padding: calc(var(--header-height) + 2rem) 5% 2rem 5%;
+    max-width: 1200px;
+    min-height: 90vh;
+    user-select: text;
+    transition: margin 0.3s;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  section {
+    display: none;
+    animation: fadeIn 0.5s;
+    width: 100%;
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: var(--shadow-light);
+    border: 1px solid var(--border-color);
+  }
+
+  section.active {
+    display: block;
+  }
+
+  .section-title {
+    color: #c62828;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #c62828;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  [data-theme="dark"] .section-title {
+    color: #ff5252;
+    border-bottom: 2px solid #ff5252;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* FORM STYLES */
+  .tag-filter-container {
+    margin-bottom: 2rem;
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-light);
+    border: 1px solid var(--border-color);
+  }
+
+  .tag-filter-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #c62828;
+  }
+
+  [data-theme="dark"] .tag-filter-title {
+    color: #ff5252;
+  }
+
+  .tag-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+
+  .tag-option {
+    position: relative;
+  }
+
+  .tag-option input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .tag-option label {
+    display: block;
+    padding: 0.8rem 1.5rem;
+    background: white;
+    color: #333;
+    border: 2px solid #e0e0e0;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    user-select: none;
+  }
+
+  [data-theme="dark"] .tag-option label {
+    background: #333;
+    color: #f0f0f0;
+    border: 2px solid #444;
+  }
+
+  .tag-option input:checked + label {
+    background: #c62828;
+    color: white;
+    border-color: #c62828;
+    box-shadow: 0 4px 10px rgba(198, 40, 40, 0.2);
+  }
+
+  [data-theme="dark"] .tag-option input:checked + label {
+    background: #ff5252;
+    border-color: #ff5252;
+  }
+
+  .tag-option label:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(198, 40, 40, 0.15);
+  }
+
+  .form-section {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-light);
+    animation: fadeIn 0.4s;
+  }
+
+  .form-section h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1.2rem;
+    color: #c62828;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  [data-theme="dark"] .form-section h3 {
+    color: #ff5252;
+  }
+
+  textarea#suggested-news,
+  .form-section textarea,
+  .form-section input,
+  .form-section select {
+    width: 100%;
+    margin-top: 0.8rem;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: white;
+    color: #333;
+    font-size: 1rem;
+    font-weight: 500;
+    resize: vertical;
+    transition: all var(--transition);
+    font-family: var(--font-primary);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  [data-theme="dark"] textarea#suggested-news,
+  [data-theme="dark"] .form-section textarea,
+  [data-theme="dark"] .form-section input,
+  [data-theme="dark"] .form-section select {
+    background: #333;
+    color: #f0f0f0;
+    border: 2px solid #444;
+  }
+
+  [data-theme="dark"] #editor,
+  [data-theme="dark"] #article-editor {
+    background: #333 !important;
+    color: #f0f0f0 !important;
+    border: 2px solid #444 !important;
+  }
+
+  #editor, #article-editor {
+    color: #333;
+  }
+
+  .form-section input:focus,
+  .form-section textarea:focus,
+  .form-section select:focus {
+    border-color: #c62828;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.2);
+  }
+
+  [data-theme="dark"] .form-section input:focus,
+  [data-theme="dark"] .form-section textarea:focus,
+  [data-theme="dark"] .form-section select:focus {
+    border-color: #ff5252;
+    box-shadow: 0 0 0 3px rgba(255, 82, 82, 0.3);
+  }
+
+  .form-btn {
+    background: #c62828;
+    color: white;
+    border: none;
+    padding: 0.9rem 1.8rem;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all var(--transition);
+    margin-top: 1.2rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    box-shadow: 0 4px 12px rgba(198, 40, 40, 0.25);
+  }
+
+  [data-theme="dark"] .form-btn {
+    background: #ff5252;
+  }
+
+  .form-btn:hover {
+    background: #8e0000;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(198, 40, 40, 0.35);
+  }
+
+  [data-theme="dark"] .form-btn:hover {
+    background: #ff1a1a;
+  }
+
+  .btn-group {
+    display: flex;
+    gap: 1.2rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .editor-toolbar {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    background: white;
+    border-radius: 12px;
+    padding: 0.8rem;
+    border: 1px solid #e0e0e0;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  [data-theme="dark"] .editor-toolbar {
+    background: #333;
+    border: 1px solid #444;
+  }
+
+  .editor-toolbar button {
+    background: white;
+    border: 1px solid #e0e0e0;
+    color: #333;
+    border-radius: 8px;
+    padding: 0.6rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  [data-theme="dark"] .editor-toolbar button {
+    background: #444;
+    border: 1px solid #555;
+    color: #f0f0f0;
+  }
+
+  .editor-toolbar button:hover,
+  .editor-toolbar button:focus {
+    background: #c62828;
+    color: white;
+    border-color: #c62828;
+    transform: scale(1.05);
+  }
+
+  [data-theme="dark"] .editor-toolbar button:hover {
+    background: #ff5252;
+  }
+
+  /* NEWS STYLES */
+  .news {
+    background: white;
+    padding: 1.8rem;
+    margin-bottom: 1.8rem;
+    border-left: 5px solid #c62828;
+    border-radius: 16px;
+    box-shadow: var(--shadow-light);
+    position: relative;
+    transition: all var(--transition);
+    animation: fadeIn 0.8s;
+  }
+
+  [data-theme="dark"] .news {
+    background: #333;
+    border-left: 5px solid #ff5252;
+  }
+
+  .news:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .news-tag {
+    font-weight: 800;
+    color: #c62828;
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+    user-select: none;
+    letter-spacing: 0.03em;
+    background: rgba(198, 40, 40, 0.1);
+    border-radius: 50px;
+    padding: 0.5rem 1.2rem;
+    display: inline-block;
+  }
+
+  [data-theme="dark"] .news-tag {
+    color: #ff5252;
+    background: rgba(255, 82, 82, 0.15);
+  }
+
+  .news time {
+    font-size: 0.9rem;
+    color: #888;
+    font-style: italic;
+    display: block;
+    margin-top: 1.5rem;
+    user-select: none;
+  }
+
+  [data-theme="dark"] .news time {
+    color: #aaa;
+  }
+
+  .news .actions {
+    margin-top: 1.8rem;
+    display: flex;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+  }
+
+  .news .actions button {
+    font-size: 1rem;
+    background: #c62828;
+    border: none;
+    color: white;
+    padding: 0.7rem 1.5rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    box-shadow: 0 3px 8px rgba(198, 40, 40, 0.25);
+    transition: all var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  [data-theme="dark"] .news .actions button {
+    background: #ff5252;
+  }
+
+  .news .actions button:hover {
+    background: #8e0000;
+    box-shadow: 0 5px 14px rgba(198, 40, 40, 0.35);
+    transform: translateY(-2px);
+  }
+
+  [data-theme="dark"] .news .actions button:hover {
+    background: #ff1a1a;
+  }
+
+  /* MODAL STYLES */
+  #preview-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--modal-bg);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    user-select: none;
+    animation: fadeIn 0.4s;
+    backdrop-filter: var(--glass-blur);
+  }
+
+  #preview-content {
+    background: white;
+    color: #333;
+    padding: 2.5rem;
+    border-radius: 20px;
+    max-width: min(90vw, 800px);
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 0 40px rgba(198, 40, 40, 0.3);
+    user-select: text;
+    position: relative;
+    border: 2px solid #c62828;
+  }
+
+  [data-theme="dark"] #preview-content {
+    background: #333;
+    color: #f0f0f0;
+    border: 2px solid #ff5252;
+  }
+
+  #preview-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    font-size: 2.2rem;
+    font-weight: 300;
+    color: #c62828;
+    cursor: pointer;
+    transition: color 0.2s;
+    z-index: 222;
+    line-height: 1;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  [data-theme="dark"] #preview-close {
+    color: #ff5252;
+  }
+
+  #preview-close:hover {
+    color: #8e0000;
+    transform: scale(1.1);
+  }
+
+  [data-theme="dark"] #preview-close:hover {
+    color: #ff1a1a;
+  }
+
+  /* LOGIN PANEL */
+  #login-panel {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+    z-index: 10000;
+    user-select: none;
+    width: min(90vw, 400px);
+    border: 2px solid #c62828;
+  }
+
+  [data-theme="dark"] #login-panel {
+    background: #333;
+    border: 2px solid #ff5252;
+  }
+
+  #login-panel h3 {
+    color: #c62828;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-align: center;
+    margin: 0 0 1.5rem 0;
+  }
+
+  [data-theme="dark"] #login-panel h3 {
+    color: #ff5252;
+  }
+
+  #login-panel input {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 12px;
+    border: 2px solid #e0e0e0;
+    background: white;
+    color: #333;
+    font-size: 1.1rem;
+    transition: all var(--transition);
+  }
+
+  [data-theme="dark"] #login-panel input {
+    background: #444;
+    color: #f0f0f0;
+    border: 2px solid #555;
+  }
+
+  #login-panel input:focus {
+    border-color: #c62828;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.2);
+  }
+
+  [data-theme="dark"] #login-panel input:focus {
+    border-color: #ff5252;
+    box-shadow: 0 0 0 3px rgba(255, 82, 82, 0.3);
+  }
+
+  .btns {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .btns button {
+    padding: 0.8rem 1.8rem;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all var(--transition);
+    font-size: 1.1rem;
+  }
+
+  .btns button:first-child {
+    background: #c62828;
+    color: white;
+    border: none;
+    box-shadow: 0 4px 12px rgba(198, 40, 40, 0.25);
+  }
+
+  [data-theme="dark"] .btns button:first-child {
+    background: #ff5252;
+  }
+
+  .btns button:first-child:hover {
+    background: #8e0000;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(198, 40, 40, 0.35);
+  }
+
+  .btns button:last-child {
+    background: white;
+    color: #333;
+    border: 2px solid #e0e0e0;
+  }
+
+  [data-theme="dark"] .btns button:last-child {
+    background: #444;
+    color: #f0f0f0;
+    border: 2px solid #555;
+  }
+
+  .btns button:last-child:hover {
+    background: #f5f5f5;
+  }
+
+  [data-theme="dark"] .btns button:last-child:hover {
+    background: #555;
+  }
+
+  /* SUGGESTIONS */
+  #suggestions-list {
+    max-height: 500px;
+    overflow-y: auto;
+    margin-top: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    background: var(--card-bg);
+    box-shadow: var(--shadow-light);
+    user-select: text;
+    display: none; /* Hidden by default */
+  }
+
+  .admin-visible #suggestions-list {
+    display: block; /* Visible for admins */
+  }
+
+  .suggestion-item {
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.5rem;
+    position: relative;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    word-break: break-word;
+  }
+
+  .suggestion-item:last-child {
+    border-bottom: none;
+  }
+
+  .suggestion-date {
+    font-size: 0.9rem;
+    color: #888;
+    margin-top: 0.8rem;
+    font-style: italic;
+  }
+
+  [data-theme="dark"] .suggestion-date {
+    color: #aaa;
+  }
+
+  .suggestion-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1.2rem;
+    justify-content: flex-end;
+  }
+
+  .suggestion-actions button {
+    background: #c62828;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 0.7rem 1.5rem;
+    cursor: pointer;
+    transition: all var(--transition);
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    box-shadow: 0 3px 8px rgba(198, 40, 40, 0.25);
+  }
+
+  [data-theme="dark"] .suggestion-actions button {
+    background: #ff5252;
+  }
+
+  .suggestion-actions button:hover {
+    background: #8e0000;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 14px rgba(198, 40, 40, 0.35);
+  }
+
+  /* NOTIFICATIONS */
+  #notifications-container {
+    position: fixed;
+    top: 6rem;
+    right: 2vw;
+    max-width: 380px;
+    z-index: 11001;
+    user-select: none;
+  }
+
+  .notification {
+    background: #c62828;
+    color: #fff;
+    padding: 1.2rem 1.8rem;
+    margin-bottom: 1.2rem;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    font-weight: 700;
+    font-size: 1.1rem;
+    opacity: 0;
+    transform: translateX(120%);
+    animation: slideIn 0.5s forwards;
+    user-select: none;
+    will-change: transform, opacity;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  [data-theme="dark"] .notification {
+    background: #ff5252;
+  }
+
+  .notification.success {
+    background: var(--success-color);
+  }
+
+  .notification.error {
+    background: #e53935;
+  }
+
+  .notification.info {
+    background: var(--info-color);
+  }
+
+  @keyframes slideIn {
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideOut {
+    to {
+      opacity: 0;
+      transform: translateX(130%);
+    }
+  }
+
+  /* ADMIN FEATURE HIDING */
+  .admin-only {
+    display: none;
+  }
+
+  .admin-visible .admin-only {
+    display: block;
+  }
+
+  .admin-visible .admin-inline {
+    display: inline-flex;
+  }
+  
+  /* Loading spinner */
+  .loader {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #c62828;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 2rem auto;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* NEW STYLES FOR SUGGESTION IMAGES */
+  .suggestion-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .suggestion-image {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid var(--border-color);
+  }
+
+  /* ARTICLE SECTION STYLES */
+  .article-form {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-light);
+  }
+
+  .article-form h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1.2rem;
+    color: #c62828;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  [data-theme="dark"] .article-form h3 {
+    color: #ff5252;
+  }
+
+  .article-toolbar {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    background: white;
+    border-radius: 12px;
+    padding: 0.8rem;
+    border: 1px solid #e0e0e0;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  [data-theme="dark"] .article-toolbar {
+    background: #333;
+    border: 1px solid #444;
+  }
+
+  .article-toolbar button {
+    background: white;
+    border: 1px solid #e0e0e0;
+    color: #333;
+    border-radius: 8px;
+    padding: 0.6rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  [data-theme="dark"] .article-toolbar button {
+    background: #444;
+    border: 1px solid #555;
+    color: #f0f0f0;
+  }
+
+  .article-toolbar button:hover,
+  .article-toolbar button:focus {
+    background: #c62828;
+    color: white;
+    border-color: #c62828;
+    transform: scale(1.05);
+  }
+
+  [data-theme="dark"] .article-toolbar button:hover {
+    background: #ff5252;
+  }
+
+  #article-editor {
+    min-height: 200px;
+    padding: 1.2rem;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: white;
+    margin-bottom: 1.5rem;
+  }
+
+  .article-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1rem;
+  }
+
+  .article-tag-option {
+    position: relative;
+  }
+
+  .article-tag-option input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .article-tag-option label {
+    display: block;
+    padding: 0.8rem 1.5rem;
+    background: white;
+    color: #333;
+    border: 2px solid #e0e0e0;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    user-select: none;
+  }
+
+  [data-theme="dark"] .article-tag-option label {
+    background: #333;
+    color: #f0f0f0;
+    border: 2px solid #444;
+  }
+
+  .article-tag-option input:checked + label {
+    background: #c62828;
+    color: white;
+    border-color: #c62828;
+    box-shadow: 0 4px 10px rgba(198, 40, 40, 0.2);
+  }
+
+  [data-theme="dark"] .article-tag-option input:checked + label {
+    background: #ff5252;
+    border-color: #ff5252;
+  }
+
+  .article-tag-option label:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(198, 40, 40, 0.15);
+  }
+
+  .pin-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    font-weight: 600;
+  }
+
+  .articles-list {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .article {
+    background: white;
+    padding: 1.8rem;
+    border-left: 5px solid #4caf50;
+    border-radius: 16px;
+    box-shadow: var(--shadow-light);
+    position: relative;
+    transition: all var(--transition);
+  }
+
+  [data-theme="dark"] .article {
+    background: #333;
+    border-left: 5px solid #66bb6a;
+  }
+
+  .article.pinned {
+    border-left: 5px solid #ff9800;
+    box-shadow: 0 4px 20px rgba(255, 152, 0, 0.25);
+  }
+
+  [data-theme="dark"] .article.pinned {
+    border-left: 5px solid #ffb74d;
+  }
+
+  .article-tag {
+    font-weight: 800;
+    color: #4caf50;
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+    user-select: none;
+    letter-spacing: 0.03em;
+    background: rgba(76, 175, 80, 0.1);
+    border-radius: 50px;
+    padding: 0.5rem 1.2rem;
+    display: inline-block;
+  }
+
+  .article.pinned .article-tag {
+    color: #ff9800;
+    background: rgba(255, 152, 0, 0.1);
+  }
+
+  [data-theme="dark"] .article-tag {
+    color: #66bb6a;
+    background: rgba(102, 187, 106, 0.15);
+  }
+
+  [data-theme="dark"] .article.pinned .article-tag {
+    color: #ffb74d;
+    background: rgba(255, 183, 77, 0.15);
+  }
+
+  .article time {
+    font-size: 0.9rem;
+    color: #888;
+    font-style: italic;
+    display: block;
+    margin-top: 1.5rem;
+    user-select: none;
+  }
+
+  [data-theme="dark"] .article time {
+    color: #aaa;
+  }
+
+  /* RESPONSIVE ADJUSTMENTS */
+  @media (max-width: 1024px) {
+    main {
+      padding: calc(var(--header-height) + 1.5rem) 4% 1.5rem 4%;
+    }
+    
+    .tag-options {
+      gap: 0.6rem;
+    }
+    
+    .tag-option label {
+      padding: 0.7rem 1.2rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    header {
+      padding: 0 1.2rem;
+      font-size: 1.5rem;
+    }
+    
+    .header-btn {
+      padding: 0.6rem;
+      min-width: 45px;
+      height: 45px;
+      justify-content: center;
+    }
+    
+    .desktop-text {
+      display: none;
+    }
+    
+    .mobile-text {
+      display: inline;
+    }
+    
+    .section-title {
+      font-size: 1.5rem;
+    }
+    
+    section {
+      padding: 1.5rem;
+    }
+    
+    .form-section {
+      padding: 1.2rem;
+    }
+    
+    .tag-filter-container {
+      padding: 1.2rem;
+    }
+  }
+
+  @media (min-width: 769px) {
+    .desktop-text {
+      display: inline;
+    }
+    
+    .mobile-text {
+      display: none;
+    }
+  }
+
+  @media (max-width: 576px) {
+    #sidebar {
+      width: 95%;
+      padding: 1rem;
+      box-sizing: border-box;
+      right: -100%;
+    }
+    
+    #sidebar.open {
+      right: 0;
+    }
+    
+    .tag-options {
+      justify-content: center;
+    }
+    
+    .news {
+      padding: 1.5rem;
+    }
+    
+    .suggestion-item {
+      padding: 1.2rem;
+    }
+    
+    .suggestion-actions {
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    
+    .suggestion-actions button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+  </style>
+</head>
+
+<body>
+  <header>
+    <button id="menu-toggle" onclick="toggleSidebar()" aria-label="Відкрити меню">☰</button>
+    <span>ТСН Новини</span>
+    <div class="header-controls">
+      <button id="theme-toggle-btn" class="header-btn" title="Змінити тему">🌗</button>
+      <button id="login-btn" class="header-btn" onclick="showLoginPanel()" title="Вхід для копірайтера">
+        <span class="desktop-text">🔑 Вхід</span>
+        <span class="mobile-text">🔑</span>
+      </button>
+      <button id="notification-toggle" class="header-btn" title="Увімкнути/вимкнути повідомлення">
+        <span class="desktop-text">🔔 Сповіщення</span>
+        <span class="mobile-text">🔔</span>
+      </button>
+      <button id="logout-btn" class="header-btn admin-only" onclick="logoutWriter()" title="Вийти">
+        <span class="desktop-text">🚪 Вихід</span>
+        <span class="mobile-text">🚪</span>
+      </button>
+    </div>
+  </header>
+
+  <aside id="sidebar">
+    <button class="sidebar-btn active" onclick="showTab('news')" aria-controls="news" aria-selected="true" role="tab" id="news-tab-btn">📰 Новини</button>
+    <button class="sidebar-btn" onclick="showTab('submit')" aria-controls="submit" aria-selected="false" role="tab" id="submit-tab-btn">📨 Запропоновані</button>
+    <button class="sidebar-btn" onclick="showTab('articles')" aria-controls="articles" aria-selected="false" role="tab" id="articles-tab-btn">📝 Статті</button>
+    <button class="sidebar-btn admin-only" onclick="showTab('admin')" aria-controls="admin" aria-selected="false" role="tab" id="admin-tab-btn">⚙️ Адмін</button>
+  </aside>
+
+  <main>
+    <section id="news" class="active" role="tabpanel" aria-labelledby="news-tab-btn">
+      <h2 class="section-title">📰 Останні новини</h2>
+      
+      <div class="tag-filter-container">
+        <div class="tag-filter-title">Фільтр за тегами:</div>
+        <div class="tag-options">
+          <div class="tag-option">
+            <input type="checkbox" id="tag-all" name="tag" value="all" checked onchange="renderNewsByTags()">
+            <label for="tag-all">Всі</label>
+          </div>
+          <div class="tag-option">
+            <input type="checkbox" id="tag-politics" name="tag" value="Політика" onchange="renderNewsByTags()">
+            <label for="tag-politics">Політика</label>
+          </div>
+          <div class="tag-option">
+            <input type="checkbox" id="tag-sport" name="tag" value="Спорт" onchange="renderNewsByTags()">
+            <label for="tag-sport">Спорт</label>
+          </div>
+          <div class="tag-option">
+            <input type="checkbox" id="tag-culture" name="tag" value="Культура" onchange="renderNewsByTags()">
+            <label for="tag-culture">Культура</label>
+          </div>
+          <div class="tag-option">
+            <input type="checkbox" id="tag-grp" name="tag" value="ГРП" onchange="renderNewsByTags()">
+            <label for="tag-grp">ГРП</label>
+          </div>
+          <div class="tag-option">
+            <input type="checkbox" id="tag-government" name="tag" value="Робота Держ.структур" onchange="renderNewsByTags()">
+            <label for="tag-government">Держструктури</label>
+          </div>
+          <div class="tag-option">
+            <input type="checkbox" id="tag-photo" name="tag" value="Фотосесія" onchange="renderNewsByTags()">
+            <label for="tag-photo">Фотосесія</label>
+          </div>
+          <div class="tag-option">
+            <input type="checkbox" id="tag-contest" name="tag" value="Конкурс" onchange="renderNewsByTags()">
+            <label for="tag-contest">Конкурс</label>
+          </div>
+          <div class="tag-option">
+            <input type="checkbox" id="tag-important" name="tag" value="Важливе" onchange="renderNewsByTags()">
+            <label for="tag-important">Важливе</label>
+          </div>
+        </div>
+      </div>
+      
+      <div id="news-feed" aria-live="polite" aria-relevant="additions">
+        <div class="loader" id="news-loader"></div>
+      </div>
+      
+      <button class="form-btn admin-only" style="background: #8e0000; margin-top: 2rem;" id="delete-all-btn" onclick="deleteAllNews()" title="Видалити всі новини">
+        🗑️ Видалити всі новини
+      </button>
+    </section>
+
+    <section id="submit" role="tabpanel" aria-labelledby="submit-tab-btn">
+      <h2 class="section-title">📨 Запропоновані новини</h2>
+      
+      <div class="form-section">
+        <h3>✍️ Запропонуйте свою новину</h3>
+        <textarea id="suggested-news" placeholder="Ваша ідея новини..." rows="3"></textarea>
+        <input type="file" id="suggestion-image" accept="image/*" multiple style="margin-top: 1rem;">
+        <button class="form-btn" onclick="submitSuggestion()">Надіслати пропозицію</button>
+      </div>
+      
+      <div id="suggestions-list" aria-live="polite" aria-relevant="additions">
+        <div class="loader" id="suggestions-loader"></div>
+      </div>
+    </section>
+
+    <section id="articles" role="tabpanel" aria-labelledby="articles-tab-btn">
+      <h2 class="section-title">📝 Статті</h2>
+      
+      <!-- Форма для написання статті -->
+      <div class="article-form admin-only">
+        <h3>✍️ Написати статтю</h3>
+        
+        <div class="article-toolbar" id="article-toolbar">
+          <button type="button" title="Жирний (Ctrl+B)" onclick="format('bold', null, 'article')"><b>B</b></button>
+          <button type="button" title="Курсив (Ctrl+I)" onclick="format('italic', null, 'article')"><i>I</i></button>
+          <button type="button" title="Підкреслення (Ctrl+U)" onclick="format('underline', null, 'article')"><u>U</u></button>
+          <button type="button" title="Списoк" onclick="format('insertUnorderedList', null, 'article')">• Список</button>
+          <button type="button" title="Заголовок" onclick="format('formatBlock','H3', 'article')"><span style="font-weight: 900;">H</span>3</button>
+          <button type="button" title="Посилання" onclick="createLink('article')">🔗</button>
+          <button type="button" title="Вставити зображення" onclick="promptImage('article')">🖼️</button>
+          <button type="button" title="По лівому краю" onclick="format('justifyLeft', null, 'article')">◀</button>
+          <button type="button" title="По центру" onclick="format('justifyCenter', null, 'article')">⨀</button>
+          <button type="button" title="По правому краю" onclick="format('justifyRight', null, 'article')">▶</button>
+          <button type="button" title="По ширині" onclick="format('justifyFull', null, 'article')">↔</button>
+          <button type="button" title="Очистити формат" onclick="format('removeFormat', null, 'article')">✕</button>
+        </div>
+        
+        <div id="article-editor" contenteditable="true" aria-label="Редактор статті" role="textbox" spellcheck="true"></div>
+        
+        <div>
+          <h3 style="margin-bottom: 1rem;">🏷️ Виберіть теги:</h3>
+          <div class="article-tags">
+            <div class="article-tag-option">
+              <input type="checkbox" id="art-useful" name="art-tag" value="Корисне">
+              <label for="art-useful">Корисне</label>
+            </div>
+            <div class="article-tag-option">
+              <input type="checkbox" id="art-health" name="art-tag" value="Здоровя">
+              <label for="art-health">Здоровя</label>
+            </div>
+            <div class="article-tag-option">
+              <input type="checkbox" id="art-sport" name="art-tag" value="Спорт">
+              <label for="art-sport">Спорт</label>
+            </div>
+          </div>
+        </div>
+        
+        <div style="margin-top: 1.5rem;">
+          <label class="pin-checkbox">
+            <input type="checkbox" id="pin-article">
+            Закріпити статтю
+          </label>
+        </div>
+        
+        <div class="btn-group">
+          <button class="form-btn" onclick="publishArticle()">📢 Опублікувати</button>
+          <button class="form-btn" onclick="showArticlePreview()">👁️ Перегляд</button>
+        </div>
+      </div>
+      
+      <!-- Список статей -->
+      <div class="articles-list" id="articles-list" aria-live="polite" aria-relevant="additions">
+        <div class="loader" id="articles-loader"></div>
+      </div>
+    </section>
+
+    <section id="admin" class="admin-section" role="tabpanel" aria-labelledby="admin-tab-btn">
+      <h2 class="section-title">⚙️ Адміністрування</h2>
+      
+      <div class="form-section">
+        <h3>📝 Публікація новини</h3>
+        
+        <div class="editor-toolbar" id="editor-toolbar">
+          <button type="button" title="Жирний (Ctrl+B)" onclick="format('bold')"><b>B</b></button>
+          <button type="button" title="Курсив (Ctrl+I)" onclick="format('italic')"><i>I</i></button>
+          <button type="button" title="Підкреслення (Ctrl+U)" onclick="format('underline')"><u>U</u></button>
+          <button type="button" title="Списoк" onclick="format('insertUnorderedList')">• Список</button>
+          <button type="button" title="Заголовок" onclick="format('formatBlock','H3')"><span style="font-weight: 900;">H</span>3</button>
+          <button type="button" title="Посилання" onclick="createLink()">🔗</button>
+          <button type="button" title="Вставити зображення" onclick="promptImage()">🖼️</button>
+          <button type="button" title="По лівому краю" onclick="format('justifyLeft')">◀</button>
+          <button type="button" title="По центру" onclick="format('justifyCenter')">⨀</button>
+          <button type="button" title="По правому краю" onclick="format('justifyRight')">▶</button>
+          <button type="button" title="По ширині" onclick="format('justifyFull')">↔</button>
+          <button type="button" title="Очистити формат" onclick="format('removeFormat')">✕</button>
+        </div>
+        
+        <div id="editor" contenteditable="true" aria-label="Редактор новини" role="textbox" spellcheck="true" style="min-height: 200px; padding: 1.2rem; border: 1px solid var(--border-color); border-radius: 12px; background: white; margin-bottom: 1.5rem;"></div>
+        
+        <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 250px;">
+            <h3 style="margin-bottom: 1rem;">🏷️ Виберіть теги:</h3>
+            <div class="tag-options">
+              <div class="tag-option">
+                <input type="checkbox" id="pub-politics" name="pub-tag" value="Політика">
+                <label for="pub-politics">Політика</label>
+              </div>
+              <div class="tag-option">
+                <input type="checkbox" id="pub-sport" name="pub-tag" value="Спорт">
+                <label for="pub-sport">Спорт</label>
+              </div>
+              <div class="tag-option">
+                <input type="checkbox" id="pub-culture" name="pub-tag" value="Культура">
+                <label for="pub-culture">Культура</label>
+              </div>
+              <div class="tag-option">
+                <input type="checkbox" id="pub-grp" name="pub-tag" value="ГРП">
+                <label for="pub-grp">ГРП</label>
+              </div>
+              <div class="tag-option">
+                <input type="checkbox" id="pub-government" name="pub-tag" value="Робота Держ.структур">
+                <label for="pub-government">Держструктури</label>
+              </div>
+              <div class="tag-option">
+                <input type="checkbox" id="pub-photo" name="pub-tag" value="Фотосесія">
+                <label for="pub-photo">Фотосесія</label>
+              </div>
+              <div class="tag-option">
+                <input type="checkbox" id="pub-contest" name="pub-tag" value="Конкурс">
+                <label for="pub-contest">Конкурс</label>
+              </div>
+              <div class="tag-option">
+                <input type="checkbox" id="pub-important" name="pub-tag" value="Важливе">
+                <label for="pub-important">Важливе</label>
+              </div>
+            </div>
+          </div>
+          
+          <div style="flex: 1; min-width: 250px;">
+            <h3 style="margin-bottom: 1rem;">🖼️ Завантажити зображення:</h3>
+            <input type="file" id="image-upload" accept="image/*" multiple onchange="handleImageUpload(event)" style="margin-bottom: 1rem; width: 100%;" />
+          </div>
+        </div>
+        
+        <div class="btn-group">
+          <button class="form-btn" onclick="publishNews()">📢 Опублікувати</button>
+          <button class="form-btn" onclick="showPreview()">👁️ Перегляд</button>
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <h3>📨 Запропоновані новини</h3>
+        <div id="suggestions-list-admin" aria-live="polite" aria-relevant="additions">
+          <div class="loader" id="admin-suggestions-loader"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="preview-modal" onclick="hidePreview(event)" role="dialog" aria-modal="true" aria-labelledby="preview-tag" aria-describedby="preview-text">
+    <div id="preview-content">
+      <button id="preview-close" onclick="hidePreview(event)" aria-label="Закрити перегляд">×</button>
+      <div class="news-tag" id="preview-tag"></div>
+      <div id="preview-text"></div>
+      <time id="preview-date"></time>
+    </div>
+  </div>
+
+  <div id="login-panel" role="dialog" aria-modal="true" aria-labelledby="login-title">
+    <h3 id="login-title">🔒 Вхід копірайтера</h3>
+    <input id="writer-email" type="email" placeholder="Email" autocomplete="email" aria-label="Email копірайтера" style="margin-bottom: 1rem;" />
+    <input id="writer-pass" type="password" placeholder="Пароль" autocomplete="current-password" aria-label="Пароль копірайтера" />
+    <div class="btns">
+      <button onclick="loginWriter()">Увійти</button>
+      <button onclick="closeLoginPanel()">Відміна</button>
+    </div>
+  </div>
+
+  <div id="notifications-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+    import { getDatabase, ref, set, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyATgwtUGOdNS18pKclEGSfmjFxTsjk0n88",
+      authDomain: "titproject-19bfd.firebaseapp.com",
+      databaseURL: "https://titproject-19bfd-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "titproject-19bfd",
+      storageBucket: "titproject-19bfd.firebasestorage.app",
+      messagingSenderId: "374156588962",
+      appId: "1:374156588962:web:181084981068a6619aa4fb",
+      measurementId: "G-DP3KFTXB4Q"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth(app);
+
+    // Create database references
+    const newsRef = ref(db, 'news');
+    const suggestionsRef = ref(db, 'suggestions');
+    const articlesRef = ref(db, 'articles');
+
+    // Глобальные переменные для хранения данных
+    let news = [];
+    let suggestions = [];
+    let articles = [];
+
+    // Переключение боковой панели
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('open');
+    }
+
+    // ---- RICH TEXT TOOLBAR ----
+    function format(cmd, param, editorId = 'editor') {
+      const editor = document.getElementById(editorId);
+      if (editor) {
+        document.execCommand(cmd, false, param);
+        editor.focus();
+      }
+    }
+
+    function createLink(editorId = 'editor') {
+      let url = prompt("Вставте посилання (URL):", "https://");
+      if (url) document.execCommand("createLink", false, url.trim());
+    }
+
+    function promptImage(editorId = 'editor') {
+      let url = prompt("URL зображення:");
+      if (url) document.execCommand("insertImage", false, url.trim());
+    }
+
+    document.getElementById("editor").addEventListener("keydown", e => {
+      if (e.ctrlKey && e.key.toLowerCase() === "b") { format('bold'); e.preventDefault(); }
+      if (e.ctrlKey && e.key.toLowerCase() === "i") { format('italic'); e.preventDefault(); }
+      if (e.ctrlKey && e.key.toLowerCase() === "u") { format('underline'); e.preventDefault(); }
+    });
+
+    document.getElementById("article-editor").addEventListener("keydown", e => {
+      if (e.ctrlKey && e.key.toLowerCase() === "b") { format('bold', null, 'article'); e.preventDefault(); }
+      if (e.ctrlKey && e.key.toLowerCase() === "i") { format('italic', null, 'article'); e.preventDefault(); }
+      if (e.ctrlKey && e.key.toLowerCase() === "u") { format('underline', null, 'article'); e.preventDefault(); }
+    });
+
+    // Обработка загрузки нескольких изображений
+    function handleImageUpload(event) {
+      const files = event.target.files;
+      if (!files || files.length === 0) return;
+      
+      const editor = document.getElementById('editor');
+      const reader = new FileReader();
+      
+      const processFile = (file, index) => {
+        return new Promise((resolve) => {
+          reader.onload = function (e) {
+            const imgElem = document.createElement('img');
+            imgElem.src = e.target.result;
+            imgElem.style.maxWidth = "100%";
+            imgElem.style.borderRadius = "12px";
+            imgElem.style.marginTop = "1rem";
+            imgElem.style.display = "block";
+            editor.appendChild(imgElem);
+            
+            // Добавляем разрыв после изображения
+            if (index < files.length - 1) {
+              editor.appendChild(document.createElement('br'));
+            }
+            resolve();
+          };
+          reader.readAsDataURL(file);
+        });
+      };
+      
+      // Последовательная обработка файлов
+      (async function() {
+        for (let i = 0; i < files.length; i++) {
+          await processFile(files[i], i);
+        }
+      })();
+    }
+
+    function handleArticleImageUpload(event) {
+      const files = event.target.files;
+      if (!files || files.length === 0) return;
+      
+      const editor = document.getElementById('article-editor');
+      const reader = new FileReader();
+      
+      const processFile = (file, index) => {
+        return new Promise((resolve) => {
+          reader.onload = function (e) {
+            const imgElem = document.createElement('img');
+            imgElem.src = e.target.result;
+            imgElem.style.maxWidth = "100%";
+            imgElem.style.borderRadius = "12px";
+            imgElem.style.marginTop = "1rem";
+            imgElem.style.display = "block";
+            editor.appendChild(imgElem);
+            
+            if (index < files.length - 1) {
+              editor.appendChild(document.createElement('br'));
+            }
+            resolve();
+          };
+          reader.readAsDataURL(file);
+        });
+      };
+      
+      (async function() {
+        for (let i = 0; i < files.length; i++) {
+          await processFile(files[i], i);
+        }
+      })();
+    }
+
+    // ---- Табы/панели ----
+    function showTab(tabId) {
+      // Снимаем активный класс со всех кнопок
+      document.querySelectorAll('aside button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Добавляем активный класс текущей кнопке
+      document.getElementById(`${tabId}-tab-btn`).classList.add('active');
+      
+      // Скрываем все секции
+      document.querySelectorAll('main>section').forEach(section => {
+        section.classList.remove('active');
+      });
+    
+      // Показываем выбранную секцию
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    function showLoginPanel() {
+      document.getElementById('login-panel').style.display = 'block';
+      document.getElementById('writer-email').focus();
+    }
+
+    function closeLoginPanel() { 
+      document.getElementById('login-panel').style.display = 'none'; 
+    }
+
+    // Функция форматирования даты в 24-часовом формате
+    function formatDate(date) {
+      return new Date(date).toLocaleString('uk-UA', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      });
+    }
+
+    // Вход администратора
+    async function loginWriter() {
+      const email = document.getElementById('writer-email').value.trim();
+      const password = document.getElementById('writer-pass').value.trim();
+
+      if (!email || !password) {
+        showNotification("Введіть email та пароль", "error");
+        return;
+      }
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        showNotification("Успішний вхід!", "success");
+        closeLoginPanel();
+      } catch (error) {
+        console.error("Помилка входу:", error);
+        const errorMap = {
+          'auth/invalid-credential': 'Невірні облікові дані',
+          'auth/user-not-found': 'Користувача не знайдено',
+          'auth/wrong-password': 'Невірний пароль',
+          'auth/invalid-email': 'Невірний формат email',
+          'auth/user-disabled': 'Акаунт вимкнений',
+          'auth/too-many-requests': 'Забагато спроб. Спробуйте пізніше'
+        };
+        const errorMessage = errorMap[error.code] || `Помилка входу: ${error.message}`;
+        showNotification(errorMessage, "error");
+      }
+    }
+
+    // Выход администратора
+    function logoutWriter() {
+      signOut(auth).then(() => {
+        showNotification("Ви вийшли з системи", "info");
+      }).catch((error) => {
+        showNotification("Помилка виходу: " + error.message, "error");
+      });
+    }
+
+    // Переключение UI для администратора
+    function toggleAdminUI(loggedIn) {
+      if (loggedIn) {
+        document.body.classList.add('admin-visible');
+      } else {
+        document.body.classList.remove('admin-visible');
+      }
+    }
+
+    window.onclick = function (e) { 
+      if (e.target === document.getElementById('login-panel')) {
+        closeLoginPanel();
+      }
+    };
+
+    // ---- ПРЕДЛОЖЕНИЯ (suggestions) ----
+    function submitSuggestion() {
+      let text = document.getElementById('suggested-news').value.trim();
+      if (!text) { 
+        showNotification("Введіть пропозицію!", "error"); 
+        return; 
+      }
+      
+      const files = document.getElementById('suggestion-image').files;
+      const images = [];
+      
+      if (files.length > 0) {
+        const reader = new FileReader();
+        
+        const processFile = (file, index) => {
+          return new Promise((resolve) => {
+            reader.onload = function (e) {
+              images.push(e.target.result);
+              resolve();
+            };
+            reader.readAsDataURL(file);
+          });
+        };
+        
+        (async function() {
+          try {
+            for (let i = 0; i < files.length; i++) {
+              await processFile(files[i], i);
+            }
+            
+            const newSuggestionRef = push(suggestionsRef);
+            await set(newSuggestionRef, {
+              text,
+              images: images.length > 0 ? images : [],
+              date: formatDate(new Date())
+            });
+            
+            document.getElementById('suggested-news').value = "";
+            document.getElementById('suggestion-image').value = "";
+            showNotification("Дякуємо за пропозицію!", "success");
+          } catch (error) {
+            console.error("Помилка збереження пропозиції:", error);
+            showNotification("Помилка збереження: " + error.message, "error");
+          }
+        })();
+      } else {
+        const newSuggestionRef = push(suggestionsRef);
+        set(newSuggestionRef, {
+          text,
+          images: [],
+          date: formatDate(new Date())
+        }).then(() => {
+          document.getElementById('suggested-news').value = "";
+          showNotification("Дякуємо за пропозицію!", "success");
+        }).catch((error) => {
+          console.error("Помилка збереження пропозиції:", error);
+          showNotification("Помилка збереження: " + error.message, "error");
+        });
+      }
+    }
+
+    function renderSuggestions(suggestions) {
+      const list = document.getElementById('suggestions-list');
+      const adminList = document.getElementById('suggestions-list-admin');
+      
+      if (!list && !adminList) return;
+      
+      const suggestionHTML = suggestions.length
+        ? suggestions.map((s, i) => {
+            const images = s.images || [];
+            return `
+              <div class="suggestion-item">
+                <div>${s.text}</div>
+                ${images.length ? `
+                  <div class="suggestion-images">
+                    ${images.map(img => `<img src="${img}" class="suggestion-image" alt="Пропозиція">`).join('')}
+                  </div>
+                ` : ''}
+                <div class="suggestion-date">${s.date}</div>
+                <div class="suggestion-actions admin-only">
+                  <button onclick="publishSuggestion('${s.id}')">📢 Публікувати</button>
+                  <button class="admin-only" onclick="deleteSuggestion('${s.id}')">🗑️ Видалити</button>
+                </div>
+              </div>
+            `;
+          }).join('')
+        : '<div style="padding:2rem;color:var(--text-color);text-align:center;opacity:0.7;">Немає запропонованих новин.</div>';
+      
+      if (list) list.innerHTML = suggestionHTML;
+      if (adminList) adminList.innerHTML = suggestionHTML;
+    }
+
+    function deleteSuggestion(id) {
+      if (confirm('Видалити цю пропозицію?')) {
+        const suggestionRef = ref(db, `suggestions/${id}`);
+        remove(suggestionRef)
+          .then(() => {
+            showNotification("Пропозицію видалено", "success");
+          })
+          .catch((error) => {
+            showNotification("Помилка видалення: " + error.message, "error");
+          });
+      }
+    }
+
+    function publishSuggestion(id) {
+      const suggestionRef = ref(db, `suggestions/${id}`);
+      
+      onValue(suggestionRef, (snapshot) => {
+        const s = snapshot.val();
+        if (s) {
+          document.getElementById('editor').innerHTML = s.text;
+          
+          if (s.images && s.images.length > 0) {
+            s.images.forEach(img => {
+              const imgElem = document.createElement('img');
+              imgElem.src = img;
+              imgElem.style.maxWidth = "100%";
+              imgElem.style.borderRadius = "12px";
+              imgElem.style.marginTop = "1rem";
+              imgElem.style.display = "block";
+              document.getElementById('editor').appendChild(imgElem);
+              document.getElementById('editor').appendChild(document.createElement('br'));
+            });
+          }
+          
+          remove(suggestionRef);
+          showTab('admin');
+          showNotification("Пропозицію завантажено в редактор", "info");
+        }
+      }, { onlyOnce: true });
+    }
+
+    // --- ТЕМА Toggle ---
+    document.getElementById('theme-toggle-btn').onclick = () => {
+      let d = document.documentElement;
+      let now = d.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      d.setAttribute('data-theme', now);
+      localStorage.setItem('theme', now);
+      showNotification(`Тема змінена на ${now === 'dark' ? 'темну' : 'світлу'}`, "info");
+    };
+
+    // ---- ПУБЛИКАЦИЯ НОВОСТЕЙ (ADMIN) ----
+    function publishNews() {
+      const selectedTags = Array.from(document.querySelectorAll('input[name="pub-tag"]:checked'))
+        .map(checkbox => checkbox.value);
+      
+      if (selectedTags.length === 0) {
+        showNotification("Виберіть хоча б один тег!", "error");
+        return;
+      }
+      
+      let html = document.getElementById('editor').innerHTML.trim();
+      if (html.length < 10) { 
+        showNotification("Дуже коротка новина!", "error"); 
+        return; 
+      }
+      
+      const newNewsRef = push(newsRef);
+      set(newNewsRef, {
+        tags: selectedTags,
+        html,
+        date: formatDate(new Date())
+      }).then(() => {
+        showNotification("Новину опубліковано!", "success");
+        document.getElementById('editor').innerHTML = "";
+        document.getElementById('image-upload').value = "";
+        document.querySelectorAll('input[name="pub-tag"]').forEach(cb => cb.checked = false);
+        showTab('news');
+      }).catch((error) => {
+        showNotification("Помилка публікації: " + error.message, "error");
+      });
+    }
+
+    function renderNews(news) {
+      let feed = document.getElementById('news-feed');
+      if (!feed) return;
+      
+      // Сортируем новости по дате (новые сначала)
+      const sortedNews = [...news].sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+      });
+      
+      const selectedTags = Array.from(document.querySelectorAll('input[name="tag"]:checked'))
+        .map(checkbox => checkbox.value);
+      
+      const filteredNews = (selectedTags.includes('all') || selectedTags.length === 0) 
+        ? sortedNews 
+        : sortedNews.filter(n => n.tags.some(tag => selectedTags.includes(tag)));
+      
+      feed.innerHTML = filteredNews.length
+        ? filteredNews.map((n, i) => `
+          <div class="news" id="news-${n.id}">
+            <div class="news-tag">${n.tags.map(tag => tag).join(', ')}</div>
+            <div class="news-text">${n.html}</div>
+            <time>${n.date ?? ""}</time>
+            <div class="actions">
+              <button onclick="copyNewsLink('${n.id}')">🔗 Копіювати посилання</button>
+              <button class="admin-only" onclick="showPreviewFromFeed('${n.id}')">👁️ Перегляд</button>
+              <button class="admin-only" onclick="deleteNews('${n.id}')">🗑️ Видалити</button>
+            </div>
+          </div>
+        `).join('')
+        : '<div style="padding:2rem;color:var(--text-color);text-align:center;opacity:0.7;">Новин за обраними тегами не знайдено.</div>';
+      
+      document.getElementById('delete-all-btn').hidden = !filteredNews.length;
+    }
+    
+    function copyNewsLink(id) {
+      const url = window.location.href.split('#')[0] + `#news-${id}`;
+      navigator.clipboard.writeText(url).then(() => {
+        showNotification("Посилання скопійовано!", "success");
+      });
+    }
+
+    function deleteNews(id) {
+      if (confirm('Видалити новину?')) {
+        const newsRef = ref(db, `news/${id}`);
+        remove(newsRef)
+          .then(() => {
+            showNotification("Новину видалено", "success");
+          })
+          .catch((error) => {
+            showNotification("Помилка видалення: " + error.message, "error");
+          });
+      }
+    }
+
+    function deleteAllNews() {
+      if (confirm('Видалити всі новини безповоротно?')) {
+        remove(newsRef)
+          .then(() => {
+            showNotification("Всі новини видалено", "success");
+          })
+          .catch((error) => {
+            showNotification("Помилка видалення: " + error.message, "error");
+          });
+      }
+    }
+
+    function renderNewsByTags() {
+      renderNews(news);
+    }
+
+  // ---- СТАТЬИ ----
+function publishArticle() {
+    // Проверка авторизации
+    const user = auth.currentUser;
+    if (!user) {
+        showNotification("Ви не авторизовані для публікації статей", "error");
+        return;
+    }
+
+    // Проверка прав пользователя (добавьте свою логику проверки прав)
+    if (!user.emailVerified) {
+        showNotification("Недостатньо прав для публікації статей", "error");
+        return;
+    }
+
+    const selectedTags = Array.from(document.querySelectorAll('input[name="art-tag"]:checked'))
+        .map(checkbox => checkbox.value);
+    
+    if (selectedTags.length === 0) {
+        showNotification("Виберіть хоча б один тег!", "error");
+        return;
+    }
+    
+    let html = document.getElementById('article-editor').innerHTML.trim();
+    if (html.length < 10) { 
+        showNotification("Стаття занадто коротка!", "error"); 
+        return; 
+    }
+    
+    const pinned = document.getElementById('pin-article').checked;
+    const imageFile = document.getElementById('article-image-upload')?.files[0];
+    
+    // Если есть изображение, обрабатываем его
+    if (imageFile) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            const imageUrl = e.target.result;
+            
+            // Сохраняем статью с изображением
+            saveArticle({
+                tags: selectedTags,
+                html: `<div class="article-image-container"><img src="${imageUrl}" alt="Зображення статті" class="article-image"></div>${html}`,
+                pinned,
+                date: formatDate(new Date()),
+                author: user.uid
+            });
+        };
+        
+        reader.readAsDataURL(imageFile);
+    } else {
+        // Сохраняем статью без изображения
+        saveArticle({
+            tags: selectedTags,
+            html,
+            pinned,
+            date: formatDate(new Date()),
+            author: user.uid
+        });
+    }
+}
+
+function saveArticle(articleData) {
+    const newArticleRef = push(articlesRef);
+    set(newArticleRef, articleData)
+        .then(() => {
+            showNotification("Статтю опубліковано!", "success");
+            
+            // Сбрасываем форму
+            document.getElementById('article-editor').innerHTML = "";
+            document.querySelectorAll('input[name="art-tag"]').forEach(cb => cb.checked = false);
+            document.getElementById('pin-article').checked = false;
+            
+            // Сбрасываем загрузку изображения
+            if (document.getElementById('article-image-upload')) {
+                document.getElementById('article-image-upload').value = "";
+            }
+        })
+        .catch((error) => {
+            console.error("Помилка публікації статті:", error);
+            showNotification("Помилка публікації: " + error.message, "error");
+        });
+}
+
+function renderArticles(articles) {
+    const list = document.getElementById('articles-list');
+    if (!list) return;
+    
+    // Сортируем: закрепленные вверху, затем по дате (новые сначала)
+    const sortedArticles = [...articles].sort((a, b) => {
+        if (a.pinned && !b.pinned) return -1;
+        if (!a.pinned && b.pinned) return 1;
+        return new Date(b.date) - new Date(a.date);
+    });
+    
+    list.innerHTML = sortedArticles.length
+        ? sortedArticles.map(article => `
+            <div class="article ${article.pinned ? 'pinned' : ''}" id="article-${article.id}">
+                <div class="article-tag">${article.tags.join(', ')}</div>
+                <div class="news-text">${article.html}</div>
+                <time>${article.date}</time>
+                <div class="actions admin-only">
+                    <button onclick="copyArticleLink('${article.id}')">🔗 Копіювати посилання</button>
+                    <button onclick="deleteArticle('${article.id}')">🗑️ Видалити</button>
+                </div>
+            </div>
+        `).join('')
+        : '<div style="padding:2rem;color:var(--text-color);text-align:center;opacity:0.7;">Статей ще немає.</div>';
+}
+
+function copyArticleLink(id) {
+    const url = window.location.href.split('#')[0] + `#article-${id}`;
+    navigator.clipboard.writeText(url).then(() => {
+        showNotification("Посилання скопійовано!", "success");
+    });
+}
+
+function deleteArticle(id) {
+    if (confirm('Видалити статтю?')) {
+        const articleRef = ref(db, `articles/${id}`);
+        remove(articleRef)
+            .then(() => {
+                showNotification("Статтю видалено", "success");
+            })
+            .catch((error) => {
+                showNotification("Помилка видалення: " + error.message, "error");
+            });
+    }
+}
+
+function showArticlePreview() {
+    const selectedTags = Array.from(document.querySelectorAll('input[name="art-tag"]:checked'))
+        .map(checkbox => checkbox.value);
+    
+    if (selectedTags.length === 0) {
+        showNotification("Виберіть хоча б один тег!", "error");
+        return;
+    }
+    
+    let html = document.getElementById('article-editor').innerHTML.trim();
+    const imageFile = document.getElementById('article-image-upload')?.files[0];
+    
+    if (imageFile) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const imageUrl = e.target.result;
+            showArticlePreviewContent(selectedTags, `<div class="article-image-container"><img src="${imageUrl}" alt="Прев'ю зображення" class="article-image"></div>${html}`);
+        };
+        reader.readAsDataURL(imageFile);
+    } else {
+        showArticlePreviewContent(selectedTags, html);
+    }
+}
+
+function showArticlePreviewContent(selectedTags, html) {
+    document.getElementById('preview-tag').innerText = selectedTags.join(', ');
+    document.getElementById('preview-text').innerHTML = html;
+    document.getElementById('preview-date').innerText = formatDate(new Date());
+    document.getElementById('preview-modal').style.display = 'flex';
+}
+
+    // ---- ПРЕДПРОСМОТР (modal) ----
+    function showPreview() {
+      const selectedTags = Array.from(document.querySelectorAll('input[name="pub-tag"]:checked'))
+        .map(checkbox => checkbox.value);
+      
+      if (selectedTags.length === 0) {
+        showNotification("Виберіть хоча б один тег!", "error");
+        return;
+      }
+      
+      let html = document.getElementById('editor').innerHTML.trim();
+      
+      document.getElementById('preview-tag').innerText = selectedTags.join(', ');
+      document.getElementById('preview-text').innerHTML = html;
+      document.getElementById('preview-date').innerText = formatDate(new Date());
+      document.getElementById('preview-modal').style.display = 'flex';
+    }
+
+    function showPreviewFromFeed(id) {
+      const newsItemRef = ref(db, `news/${id}`);
+      onValue(newsItemRef, (snapshot) => {
+        const n = snapshot.val();
+        if (n) {
+          document.getElementById('preview-tag').innerText = n.tags.join(', ');
+          document.getElementById('preview-text').innerHTML = n.html;
+          document.getElementById('preview-date').innerText = n.date;
+          document.getElementById('preview-modal').style.display = 'flex';
+        }
+      }, { onlyOnce: true });
+    }
+
+    function hidePreview(e) {
+      if (!e || e.target === document.getElementById('preview-modal') || e.target.id === "preview-close")
+        document.getElementById('preview-modal').style.display = 'none';
+    }
+
+    // ---- Уведомления ----
+    function showNotification(txt, type = "info") {
+      let c = document.getElementById('notifications-container');
+      let d = document.createElement('div');
+      d.className = 'notification ' + type;
+      d.innerText = txt;
+      c.appendChild(d);
+      setTimeout(() => { d.style.animation = "slideOut .42s forwards"; }, 3000);
+      setTimeout(() => { if (d.parentNode) c.removeChild(d); }, 3500);
+    }
+
+    // ---- Уведомления: permission toggle ----
+    document.getElementById('notification-toggle').onclick = function () {
+      let btn = this;
+      if (btn.classList.contains('active')) {
+        btn.classList.remove('active'); 
+        btn.innerHTML = '<span class="desktop-text">🔔 Сповіщення</span><span class="mobile-text">🔔</span>';
+        localStorage.setItem('notifications', '0');
+        showNotification("Повідомлення вимкнені", "info");
+      } else {
+        btn.classList.add('active'); 
+        btn.innerHTML = '<span class="desktop-text">🔕 Сповіщення</span><span class="mobile-text">🔕</span>';
+        localStorage.setItem('notifications', '1');
+        showNotification("Повідомлення ввімкнені!", "success");
+      }
+    };
+
+    // ---- ИНИЦИАЛИЗАЦИЯ (загрузка при старте) ----
+    document.addEventListener('DOMContentLoaded', () => {
+      // Загрузка темы
+      let savedTheme = localStorage.getItem('theme');
+      if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+      
+      // Подписка на новости
+      onValue(newsRef, (snapshot) => {
+        const newsData = snapshot.val();
+        news = newsData ? Object.keys(newsData).map(key => ({ 
+          id: key, 
+          ...newsData[key],
+          date: formatDate(new Date(newsData[key].date || Date.now()))
+        })).sort((a, b) => new Date(b.date) - new Date(a.date)) : [];
+        renderNews(news);
+        document.getElementById('news-loader').style.display = 'none';
+      }, (error) => {
+        console.error("Ошибка загрузки новостей:", error);
+        document.getElementById('news-loader').style.display = 'none';
+      });
+      
+      // Подписка на предложения
+      onValue(suggestionsRef, (snapshot) => {
+        try {
+          const suggestionsData = snapshot.val();
+          suggestions = suggestionsData ? Object.keys(suggestionsData).map(key => ({ 
+            id: key, 
+            ...suggestionsData[key]
+          })) : [];
+          
+          renderSuggestions(suggestions);
+          
+          if (document.getElementById('suggestions-loader')) {
+            document.getElementById('suggestions-loader').style.display = 'none';
+          }
+          if (document.getElementById('admin-suggestions-loader')) {
+            document.getElementById('admin-suggestions-loader').style.display = 'none';
+          }
+        } catch (error) {
+          console.error("Ошибка обработки предложений:", error);
+          showNotification("Помилка завантаження пропозицій", "error");
+        }
+      }, (error) => {
+        console.error("Ошибка загрузки предложений:", error);
+        showNotification("Помилка завантаження пропозицій", "error");
+      });
+
+      // Подписка на статьи
+      onValue(articlesRef, (snapshot) => {
+        const articlesData = snapshot.val();
+        articles = articlesData ? Object.keys(articlesData).map(key => ({ 
+          id: key, 
+          ...articlesData[key]
+        })) : [];
+        renderArticles(articles);
+        document.getElementById('articles-loader').style.display = 'none';
+      }, (error) => {
+        console.error("Ошибка загрузки статей:", error);
+        document.getElementById('articles-loader').style.display = 'none';
+      });
+      
+      // Подписка на состояние аутентификации
+      onAuthStateChanged(auth, (user) => {
+        toggleAdminUI(!!user);
+      });
+      
+      // Адаптация интерфейса для мобильных устройств
+      function adaptForMobile() {
+        const isMobile = window.innerWidth <= 768;
+        document.querySelectorAll('.desktop-text').forEach(el => {
+          el.style.display = isMobile ? 'none' : 'inline';
+        });
+        document.querySelectorAll('.mobile-text').forEach(el => {
+          el.style.display = isMobile ? 'inline' : 'none';
+        });
+      }
+      
+      // Первоначальная адаптация
+      adaptForMobile();
+      
+      // Обработчик изменения размера окна
+      window.addEventListener('resize', adaptForMobile);
+      
+      // Проверка сохраненного состояния уведомлений
+      if (localStorage.getItem('notifications') === '1') {
+        document.getElementById('notification-toggle').classList.add('active');
+        document.getElementById('notification-toggle').innerHTML = '<span class="desktop-text">🔕 Сповіщення</span><span class="mobile-text">🔕</span>';
+      }
+      
+      // Прокрутка к новости при наличии якоря в URL
+      if (window.location.hash) {
+        const newsElement = document.querySelector(window.location.hash);
+        if (newsElement) {
+          setTimeout(() => {
+            newsElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 500);
+        }
+      }
+    });
+
+    // Сделаем функции глобальными для работы из HTML
+    window.toggleSidebar = toggleSidebar;
+    window.showTab = showTab;
+    window.showLoginPanel = showLoginPanel;
+    window.closeLoginPanel = closeLoginPanel;
+    window.loginWriter = loginWriter;
+    window.logoutWriter = logoutWriter;
+    window.submitSuggestion = submitSuggestion;
+    window.publishSuggestion = publishSuggestion;
+    window.deleteSuggestion = deleteSuggestion;
+    window.publishNews = publishNews;
+    window.deleteNews = deleteNews;
+    window.deleteAllNews = deleteAllNews;
+    window.renderNewsByTags = renderNewsByTags;
+    window.showPreview = showPreview;
+    window.showPreviewFromFeed = showPreviewFromFeed;
+    window.hidePreview = hidePreview;
+    window.copyNewsLink = copyNewsLink;
+    window.format = format;
+    window.createLink = createLink;
+    window.promptImage = promptImage;
+    window.handleImageUpload = handleImageUpload;
+    window.publishArticle = publishArticle;
+    window.deleteArticle = deleteArticle;
+    window.copyArticleLink = copyArticleLink;
+    window.showArticlePreview = showArticlePreview;
+  </script>
+</body>
+</html>
